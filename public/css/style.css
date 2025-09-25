@@ -1,0 +1,19 @@
+.custom-time-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    /* Add some space below the header */
+}
+
+.custom-time-header .time-label {
+    margin-right: 20px;
+    /* Add space between the Hours and Minutes spans */
+}
+
+/* Optional: Adjust the overall alignment */
+.flatpickr-time {
+    display: flex;
+    justify-content: space-around;
+}

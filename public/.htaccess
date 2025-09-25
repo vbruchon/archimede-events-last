@@ -1,0 +1,50 @@
+# o2switch pagespeed start / DO NOT REMOVE OR EDIT
+<IfModule pagespeed_module>
+ModPagespeed on
+ModPagespeedRewriteLevel PassThrough
+ModPagespeedEnableFilters combine_css,defer_javascript
+</IfModule>
+# o2switch pagespeed end / DO NOT REMOVE OR EDIT
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+    RewriteEngine On
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+    # Send Requests To Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+    RewriteEngine on
+    RewriteCond %{HTTP_HOST} ^archimede.cedille-formation.fr$
+    RewriteRule ^robots.txt$ robots.txt
+ 
+</IfModule>
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/icxf6075/public_html/archimede"
+PassengerBaseURI "/"
+PassengerNodejs "/home/icxf6075/nodevenv/public_html/archimede/18/bin/node"
+PassengerAppType node
+PassengerStartupFile /home/icxf6075/public_html/archimede/public/index.php
+PassengerAppLogFile "/home/icxf6075/public_html/archimede"
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
+# DO NOT REMOVE OR MODIFY. CLOUDLINUX ENV VARS CONFIGURATION BEGIN
+<IfModule Litespeed>
+</IfModule>
+# DO NOT REMOVE OR MODIFY. CLOUDLINUX ENV VARS CONFIGURATION END
+RewriteCond %{HTTP_HOST} ^archimede\-events\.fr$ [OR]
+RewriteCond %{HTTP_HOST} ^www\.archimede\-events\.fr$
+RewriteRule ^/?$ "https\:\/\/archimede\-events\.fr\/login" [R=301,L]
+
+
+
+<Files 403.shtml>
+order allow,deny
+allow from all
+</Files>
