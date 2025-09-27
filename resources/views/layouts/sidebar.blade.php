@@ -1,6 +1,5 @@
 <div class=" text-white w-64 h-screen fixed top-0 left-0 transform transition-transform duration-300 z-50">
     <div class="p-4 flex justify-end">
-        <!-- Close Button -->
         <button @click="open = false" class="text-white focus:outline-none block md:hidden">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -36,10 +35,14 @@
             </form>
             @else
 
-            <a href="{{ $link['url'] }}" class="nav-item w-full flex items-center px-2 py-2 rounded-lg text-white hover:bg-custom-blue hover:border-b-4" data-url="{{ $link['url'] }}">
+            <a href="{{ $link['url'] }}"
+                class="nav-item w-full flex items-center px-2 py-2 rounded-lg text-white hover:bg-custom-blue 
+          border-b-4 border-transparent hover:border-white"
+                data-url="{{ $link['url'] }}">
                 {!! $link['svg'] !!}
                 <span class="ml-3">{{ $link['label'] }}</span>
             </a>
+
 
 
 
@@ -59,13 +62,13 @@
 
     linkElements.forEach(linkElement => {
         const linkUrl = linkElement.href;
-        //Create instance URL by complete url and extract pathname access of URL
         const linkPathname = new URL(linkUrl).pathname;
 
-        // Vérifier si l'URL de la page correspond à l'URL du lien
         if (current_url === linkPathname) {
             linkElement.classList.add('bg-custom-blue');
             linkElement.classList.add('border-b-4');
+            linkElement.classList.add('border-white');
         }
+
     });
 </script>

@@ -44,7 +44,7 @@ $dates = [
 <div class='flex items-center justify-center mt-5'>
     <nav class="hidden space-x-10 md:flex w-full">
         <div class="relative w-full left-2">
-            <button id="filterButton" type="button" class="transition duration-300 transform hover:scale-105 text-gray-500 group p-4 inline-flex items-center rounded-md bg-white text-base font-medium hover:text-gray-900 hover:bg-custom-purple hover:text-white ml-4 mb-4 shadow-lg" aria-expanded="false">
+            <button id="filterButton" type="button" class="transition duration-300 transform hover:scale-105 text-gray-500 group p-4 inline-flex items-center rounded-md bg-white text-base font-medium hover:text-gray-900 hover:bg-custom-purple hover:dark:text-white ml-4 mb-4 shadow-lg" aria-expanded="false">
                 <span>Filtres</span>
                 <svg id="filterIcon" class="text-gray-400 ml-2 h-5 w-5 group-hover:text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                     <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />

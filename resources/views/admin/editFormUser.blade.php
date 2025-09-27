@@ -5,9 +5,9 @@
         </h2>
     </x-slot>
     <main class="w-full">
-    <a href="{{route('userEvent.all')}}" class="w-3/6 mb-3 block ms-8 text-xl text-center text-white rounded-lg p-2.5 bg-fuchsia-900 transition duration-300 transform hover:scale-105">
-        Retourner aux utilisateurs
-    </a>
+        <div class="mt-4">
+            <x-custom-button route="admin.users.list" content="Retourner aux utilisateurs" />
+        </div>
         <form action="{{ route('admin.users.update', $user) }}" method="post" class="bg-gray-100 flex flex-col p-8 rounded-2xl w-full justify-center mx-auto mt-8 mb-6">
             @csrf
             @method('put')
@@ -26,7 +26,7 @@
                     <input class="bg-white border border-gray-300 text-gray-900 text-l rounded-lg p-2 @error('email') is-invalid @enderror" name="password" type="hidden" value="{{ old('password', $user->password) }}">
                 </div>
             </div>
-            <input class="w-3/5 mb-3 cursor-pointer block mx-auto text-xl text-center text-white rounded-lg p-5 bg-fuchsia-900 transition duration-300 transform hover:scale-105" type="submit" value="Envoyer">
+            <input class="w-fit mb-3 cursor-pointer block mx-auto  text-white rounded-lg py-2 px-4 bg-custom-purple transition duration-300 transform hover:scale-105" type="submit" value="Envoyer">
         </form>
     </main>
 </x-app-layout>

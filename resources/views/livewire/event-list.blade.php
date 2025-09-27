@@ -26,7 +26,7 @@
                 <!-- <hr class="absolute top-8 left-16 p-2 w-1/15 border-custom-blue"> -->
                 @endisset
                 @if($event->is_Fix === 0)
-                <img src="{{asset('image/badge.png')}}" alt="" class="w-1/6 absolute top-8 right-10">
+                <img src="{{asset('image/badge.png')}}" alt="" class="w-1/12 absolute top-8 right-10">
                 @endif
                 <p class="p-4 font-semibold text-3xl text-custom-blue">{{$event->name}}</p>
                 <div class="my-6 flex space-x-4">
