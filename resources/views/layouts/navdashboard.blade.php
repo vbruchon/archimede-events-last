@@ -1,4 +1,4 @@
-<aside id="logo-sidebar" class="fixed z-50 top-0 left-0 z-40 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+<aside id="logo-sidebar" class="fixed top-0 left-0 z-40 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
     <div class="h-full px-3 py-4 overflow-y-auto bg-custom-purple" id="menu">
         <x-application-logo class="text-white" />
 
@@ -41,15 +41,15 @@
             @endforeach
         </ul>
     </div>
-    
-    
+
+
 </aside>
 <div class="hide" id="displayMenuMobile">
-    <img src="image/MenuBurger.png" alt="menu" onclick="showMenu()"/>
+    <img src="image/MenuBurger.png" alt="menu" onclick="showMenu()" />
 </div>
 
 <div class="hide" id="undisplayMenuMobile">
-    <img src="image/FermerMenu.png" alt="fermer" onclick="hideMenu()"/>
+    <img src="image/FermerMenu.png" alt="fermer" onclick="hideMenu()" />
 </div>
 <script>
     const current_url = window.location.pathname;
@@ -67,41 +67,37 @@
             linkElement.classList.add('border-b-4');
         }
     });
-    
+
     iconeMobile = document.getElementById("displayMenuMobile");
     iconeFermerMobile = document.getElementById("undisplayMenuMobile");
     menuDesktop = document.getElementById("menu");
-    
-    if(screen.width < 1024)
-    {
+
+    if (screen.width < 1024) {
         menuDesktop.classList.add("hide");
         iconeMobile.classList.remove("hide");
     }
-    
-    function showMenu()
-    {
+
+    function showMenu() {
         iconeMobile.classList.add("hide");
         iconeFermerMobile.classList.remove("hide");
         iconeFermerMobile.classList.add("passeDevant");
         menuDesktop.classList.remove("hide");
     }
-    
-    function hideMenu()
-    {
+
+    function hideMenu() {
         iconeMobile.classList.remove("hide");
         iconeFermerMobile.classList.add("hide");
         iconeFermerMobile.classList.remove("passeDevant");
         menuDesktop.classList.add("hide");
     }
-    
 </script>
 
 <style>
-    .hide
-    {
-        display:none;
+    .hide {
+        display: none;
     }
-    .passeDevant{
+
+    .passeDevant {
         position: absolute;
         z-index: 20000;
     }

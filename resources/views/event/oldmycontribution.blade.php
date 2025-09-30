@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="page-header">
             {{ __('Liste des événements') }}
         </h2>
     </x-slot>
@@ -11,7 +11,7 @@
     @endif
     <main class="w-full mt-10">
 
-    <x-custom-button route="userEvent.create" content="Ajouter un nouvel événement" />
+        <x-custom-button route="userEvent.create" content="Ajouter un nouvel événement" />
 
         <div class="events">
             @if($events->isEmpty())
@@ -89,7 +89,7 @@
                         <p class="p-2 text-lg"> {{$event->status->name}}</p>
                     </div>
                     <div class="flex mb-5">
-                    <svg class="w-9" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="#701a75">
+                        <svg class="w-9" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="#701a75">
                             <g id="SVGRepo_bgCarrier" stroke-width="0" />
                             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" />
                             <g id="SVGRepo_iconCarrier">

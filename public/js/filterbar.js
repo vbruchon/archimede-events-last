@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
             backdiv = document.createElement("div");
             backdiv.id = "back-div";
             backdiv.style =
-                "position: fixed;  width: 100%; height: 100%; top: 0%; background-color: #182946; opacity: 90%;";
+                "position: fixed;  width: 100%; height: 100%; top: 0%; background-color: var(--color-custom-blue); opacity: 90%;";
             main.appendChild(backdiv); // <- ici
         } else if (backdiv) {
             backdiv.remove();

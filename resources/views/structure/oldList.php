@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight ml-6">
+        <h2 class="page-header ml-6">
             {{ __('Liste des structures') }}
         </h2>
     </x-slot>

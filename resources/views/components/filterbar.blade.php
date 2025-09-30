@@ -41,12 +41,11 @@ $dates = [
 @endphp
 
 <div class="flex items-center justify-center mt-5">
-    <nav class="w-full relative px-4">
-        <!-- Bouton Filtres -->
+    <nav class="w-full relative">
         <button id="filterButton" type="button"
-            class="flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-black font-semibold rounded-lg shadow-md hover:scale-105 hover:shadow-lg transition-transform duration-300"
+            class="flex items-center justify-center gap-4 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-black font-semibold rounded-lg shadow-md hover:scale-105 hover:shadow-lg transition-transform duration-300"
             aria-expanded="false">
-            <span>Filtres</span>
+            <span>Filtrer</span>
             <svg id="filterIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="w-5 h-5 transition-transform duration-300">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -54,7 +53,6 @@ $dates = [
             </svg>
         </button>
 
-        <!-- Dropdown -->
         <div id="filterDropdown" class="hidden absolute left-50/100 z-50 w-10/12 -translate-x-1/2 transform px-2 sm:px-0">
             <div class="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 mx-auto border-2 border-custom-light-purple">
                 <div class="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">

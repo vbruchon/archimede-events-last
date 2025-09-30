@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight ml-4">
+        <h2 class="page-header ml-4">
             {{ __('Liste des événements') }}
         </h2>
     </x-slot>

@@ -15,25 +15,28 @@
     @livewireStyles
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+
 </head>
 
 <body class="font-sans antialiased bg-gray-100">
-    <!-- Page Heading -->
-    @if (isset($header))
-    <header class="bg-white shadow fixed z-50 top-0 left-0 w-full z-0">
-        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            {{ $header }}
-        </div>
-    </header>
-    @endif
+
 
     <div class="flex">
         <aside class="h-screen w-sidebar z-50" aria-label="Sidebar">
             @include('layouts.navdashboard')
         </aside>
 
-        <main class="flex-1 mt-20">
-            <!-- Page Content -->
+        <main class="flex-1">
+            @if (isset($header))
+            <header class="bg-white shadow sticky top-0 w-full z-10">
+                <div class="max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
+                    {{ $header }}
+                </div>
+            </header>
+            @endif
             {{ $slot }}
         </main>
     </div>

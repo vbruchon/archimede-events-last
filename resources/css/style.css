@@ -1,10 +1,3 @@
-:root {
-    --color-light-purple: #912197;
-    --color-gray-bg: #f3f4f6;
-    --color-custom-blue: #182946;
-    --color-custom-purple: #5e053a;
-}
-
 .custom-time-header {
     display: flex;
     justify-content: space-between;
@@ -29,7 +22,6 @@
     column-gap: 1.5rem;
     padding-top: 2rem;
     margin-left: 8rem;
-    margin-right: 8rem;
 }
 
 .page-header {
@@ -56,11 +48,6 @@
 .action-bar {
     margin: 1.5rem 1.5rem 0 1.5rem;
     text-align: right;
-}
-
-.back-action-bar {
-    margin: 3rem 3rem 0;
-    text-align: left;
 }
 
 .admin-list-card {
@@ -105,7 +92,6 @@
     .list-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         margin-left: 8rem;
-        margin-right: 8rem;
     }
 }
 
@@ -117,6 +103,5 @@
     .list-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
         margin-left: 2.5rem;
-        margin-right: 2.5rem;
     }
 }
