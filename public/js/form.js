@@ -1,45 +1,77 @@
-var previsionnelCheckbox = document.getElementById("no-fix");
-var fixCheckbox = document.getElementById("fix");
+export function initEventForm(options = {}) {
+    // options: { startSelector, endSelector, defaultStart, defaultEnd }
+    const startSelector = options.startSelector || "#dateStart";
+    const endSelector = options.endSelector || "#dateEnd";
+    const defaultStart = options.defaultStart || null;
+    const defaultEnd = options.defaultEnd || null;
 
-previsionnelCheckbox.addEventListener("click", function() {
-    if (previsionnelCheckbox.checked) {
-        fixCheckbox.checked = false;
-    } else {
-        fixCheckbox.checked = true;
+    const startDatePicker = flatpickr(startSelector, {
+        enableTime: true,
+        time_24hr: true,
+        dateFormat: "d-m-Y H:i",
+        locale: "fr",
+        defaultDate: defaultStart,
+        onChange: function (selectedDates) {
+            if (selectedDates.length) {
+                const startDate = selectedDates[0];
+                endDatePicker.set("minDate", startDate);
+
+                if (!endDatePicker.selectedDates.length) {
+                    const endDate = new Date(
+                        startDate.getTime() + 60 * 60 * 1000
+                    );
+                    endDatePicker.setDate(endDate, true);
+                }
+            }
+        },
+        onReady: addTimeHeader,
+    });
+
+    const endDatePicker = flatpickr(endSelector, {
+        enableTime: true,
+        time_24hr: true,
+        dateFormat: "d-m-Y H:i",
+        locale: "fr",
+        defaultDate: defaultEnd,
+        onReady: addTimeHeader,
+    });
+
+    function addTimeHeader(selectedDates, dateStr, instance) {
+        instance.calendarContainer
+            .querySelector(".flatpickr-time")
+            .insertAdjacentHTML(
+                "afterbegin",
+                `
+            <div class="custom-time-header">
+                <span class="time-label">Heures</span>
+                <span class="time-label">Minutes</span>
+            </div>
+        `
+            );
     }
-});
 
-fixCheckbox.addEventListener("click", function() {
-    if (previsionnelCheckbox.checked) {
-        previsionnelCheckbox.checked = false;
-    } else {
-        previsionnelCheckbox.checked = true;
+    const radios = document.querySelectorAll("input[name='is_Fix']");
+    const fixBlock = document.getElementById("is_fix");
+    const notFixBlock = document.getElementById("is_not_fix");
+
+    function toggleBlocks() {
+        const checked = document.querySelector("input[name='is_Fix']:checked");
+        if (!checked) {
+            fixBlock.style.display = "none";
+            notFixBlock.style.display = "none";
+            return;
+        }
+        if (checked.value === "1") {
+            fixBlock.style.display = "block";
+            notFixBlock.style.display = "none";
+        } else {
+            fixBlock.style.display = "none";
+            notFixBlock.style.display = "block";
+        }
     }
-});
 
-// Récupérer les références des éléments HTML
-var fixCheckbox = document.getElementById('fix');
-var notFixCheckbox = document.getElementById('no-fix');
-var isFixDiv = document.getElementById('is_fix');
-var isNotFixDiv = document.getElementById('is_not_fix');
+    radios.forEach((radio) => radio.addEventListener("change", toggleBlocks));
+    toggleBlocks();
 
-// Fonction pour afficher/masquer les div en fonction de l'état des cases à cocher
-function toggleDivVisibility() {
-    if (fixCheckbox.checked) {
-        isFixDiv.style.display = 'block';
-        isNotFixDiv.style.display = 'none';
-    } else if (notFixCheckbox.checked) {
-        isFixDiv.style.display = 'none';
-        isNotFixDiv.style.display = 'block';
-    } else {
-        isFixDiv.style.display = 'none';
-        isNotFixDiv.style.display = 'none';
-    }
+    return { startDatePicker, endDatePicker };
 }
-
-// Appeler la fonction pour définir l'état initial des div
-toggleDivVisibility();
-
-// Ajouter des écouteurs d'événements pour les clics sur les cases à cocher
-fixCheckbox.addEventListener('click', toggleDivVisibility);
-notFixCheckbox.addEventListener('click', toggleDivVisibility);

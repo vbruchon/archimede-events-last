@@ -148,99 +148,14 @@
         <input type="submit" value="Modifier l'événement" class="submit-btn">
     </form>
 
+    <script type="module">
+        import {
+            initEventForm
+        } from '/js/form.js';
 
-    <script src="{{ asset('js/form.js') }}"></script>
-
-    <script>
-        // Activate the date and time picker with headers for hours and minutes
-        document.addEventListener('DOMContentLoaded', function() {
-            const startDatePicker = flatpickr("#dateStart", {
-                enableTime: true,
-                time_24hr: true,
-                dateFormat: "d-m-Y H:i",
-                locale: "fr", // set locale to French
-                onChange: function(selectedDates, dateStr, instance) {
-                    endDatePicker.set('minDate', dateStr); // Set the minimum date for endDate based on startDate
-                },
-                onReady: function(selectedDates, dateStr, instance) {
-                    instance.calendarContainer.querySelector('.flatpickr-time').insertAdjacentHTML('afterbegin', `
-                    <div class="custom-time-header">
-            <span class="time-label">Heures</span>
-            <span class="time-label">Minutes</span>
-        </div>
-                `);
-                }
-            });
-
-            const endDatePicker = flatpickr("#dateEnd", {
-                enableTime: true,
-                time_24hr: true,
-                dateFormat: "d-m-Y H:i",
-                locale: "fr", // set locale to French
-                onReady: function(selectedDates, dateStr, instance) {
-                    instance.calendarContainer.querySelector('.flatpickr-time').insertAdjacentHTML('afterbegin', `
-                    <div class="custom-time-header">
-            <span class="time-label">Heures</span>
-            <span class="time-label">Minutes</span>
-        </div>
-                `);
-                }
-            });
+        initEventForm({
+            defaultStart: "{{ old('start', optional($event->date_start)->format('d-m-Y H:i')) }}",
+            defaultEnd: "{{ old('end', optional($event->date_end)->format('d-m-Y H:i')) }}"
         });
-
-        window.onload = function() {
-            document.getElementById('dateStart').value = "{{ old('start', optional($event->date_start)->format('d-m-Y H:i')) }}";
-            document.getElementById('dateEnd').value = "{{ old('end', optional($event->date_end)->format('d-m-Y H:i')) }}";
-
-            // Optionally, if you want to initialize Flatpickr with these values
-            startDatePicker.setDate(document.getElementById('dateStart').value, true);
-            endDatePicker.setDate(document.getElementById('dateEnd').value, true);
-        };
-
-
-
-        function verifyDateStart() {
-            newDateStart = new Date(start.value);
-
-            if (newDateStart.toTimeString().slice(9, 17) == "GMT+0100") {
-                newDateStart.setHours(newDateStart.getHours() + 1);
-            } else {
-                newDateStart.setHours(newDateStart.getHours() + 2);
-            }
-            start.value = newDateStart.toISOString().slice(0, 16);
-
-            dateTomorrow.setDate(newDateStart.getDate());
-            dateTomorrow.setHours(newDateStart.getHours() + 1);
-            dateTomorrow.setMinutes(newDateStart.getMinutes());
-            end = document.getElementById('dateEnd');
-            end.value = dateTomorrow.toISOString().slice(0, 16);
-
-        }
-
-
-        function verifyDateEnd() {
-            newDateEnd = new Date(end.value);
-            startDate = new Date(start.value);
-            if (newDateEnd.toTimeString().slice(9, 17) == "GMT+0100") {
-                newDateEnd.setHours(newDateEnd.getHours() + 1);
-            } else {
-                newDateEnd.setHours(newDateEnd.getHours() + 2);
-            }
-            end.value = newDateEnd.toISOString().slice(0, 16);
-        }
-
-
-        let url = window.location.href;
-        console.log(url);
-        let realURL = (url.substring(0, url.length - 5));
-
-        console.log("nouw ", realURL);
-        /*fetch(url)
-            .then((response) => {
-                console.log("coucou ", response.data);
-            })
-            .catch((error) => {
-                console.log("error ", error);
-            });*/
     </script>
 </x-app-layout>

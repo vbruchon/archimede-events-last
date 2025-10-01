@@ -130,11 +130,11 @@
                 <div id="date" class="form-row">
                     <div class="form-group half">
                         <label for="date-start">Début :<span class="required">*</span></label>
-                        <input class=" @error('date_start') is-invalid @enderror" name="date_start" type="text" id="dateStart" onchange="verifyDateStart()">
+                        <input class=" @error('date_start') is-invalid @enderror" name="date_start" type="text" id="dateStart">
                     </div>
                     <div class="form-group half">
                         <label for="date-end">Fin :</label>
-                        <input class=" @error('date_end') is-invalid @enderror" name="date_end" type="text" id="dateEnd" onchange="verifyDateEnd()">
+                        <input class=" @error('date_end') is-invalid @enderror" name="date_end" type="text" id="dateEnd">
                     </div>
                 </div>
                 @error('date_start')<span class="form-error-text">{{ $message }}</span>@enderror
@@ -157,139 +157,13 @@
         </form>
     </div>
 
-    <script src="{{ asset('js/form.js') }}"></script>
-
-    <script>
-        // Activate the date and time picker with headers for hours and minutes
-        document.addEventListener('DOMContentLoaded', function() {
-            const startDatePicker = flatpickr("#dateStart", {
-                enableTime: true,
-                time_24hr: true,
-                dateFormat: "d-m-Y H:i",
-                locale: "fr", // set locale to French
-                onChange: function(selectedDates, dateStr, instance) {
-                    endDatePicker.set('minDate', dateStr); // Set the minimum date for endDate based on startDate
-                },
-                onReady: function(selectedDates, dateStr, instance) {
-                    instance.calendarContainer.querySelector('.flatpickr-time').insertAdjacentHTML('afterbegin', `
-                    <div class="custom-time-header">
-            <span class="time-label">Heures</span>
-            <span class="time-label">Minutes</span>
-        </div>
-                `);
-                }
-            });
-
-            const endDatePicker = flatpickr("#dateEnd", {
-                enableTime: true,
-                time_24hr: true,
-                dateFormat: "d-m-Y H:i",
-                locale: "fr", // set locale to French
-                onReady: function(selectedDates, dateStr, instance) {
-                    instance.calendarContainer.querySelector('.flatpickr-time').insertAdjacentHTML('afterbegin', `
-                    <div class="custom-time-header">
-            <span class="time-label">Heures</span>
-            <span class="time-label">Minutes</span>
-        </div>
-                `);
-                }
-            });
-        });
-
-        // Set the input values to empty when the page loads
-        window.onload = function() {
-            document.getElementById('dateStart').value = ""; // Clear the start date input
-            document.getElementById('dateEnd').value = ""; // Clear the end date input
-        }
-
-        function verifyDateStart() {
-            let start = document.getElementById('dateStart');
-            let newDateStart = new Date(start.value);
-
-            if (!start.value) {
-                console.log("Choisissez une date de début, s'il vous plaît.");
-                return; // Exit if no date is selected
-            }
-
-            let dateToday = new Date(); // Current date and time
-
-            if (newDateStart.getTime() < dateToday.getTime()) {
-                // If selected date is in the past, set it to the current date and time
-                start.value = dateToday.toISOString().slice(0, 16);
-            } else {
-                // Adjust for timezone if necessary
-                if (newDateStart.toTimeString().slice(9, 17) === "GMT+0100") {
-                    newDateStart.setHours(newDateStart.getHours() + 1);
-                } else {
-                    newDateStart.setHours(newDateStart.getHours() + 2);
-                }
-
-                start.value = newDateStart.toISOString().slice(0, 16);
-
-                // Set the end date to one hour after the start date
-                let dateTomorrow = new Date(newDateStart);
-                dateTomorrow.setHours(newDateStart.getHours() + 1);
-                document.getElementById('dateEnd').value = dateTomorrow.toISOString().slice(0, 16);
-            }
-        }
-
-        function verifyDateEnd() {
-            let end = document.getElementById('dateEnd');
-            let newDateEnd = new Date(end.value);
-            let start = document.getElementById('dateStart');
-            let startDate = new Date(start.value);
-
-            if (!end.value) {
-                console.log("Choisissez une date de fin, s'il vous plaît.");
-                return; // Exit if no date is selected
-            }
-
-            // Ensure the end date is after the start date
-            if (newDateEnd.getTime() < startDate.getTime()) {
-                // If end date is before the start date, set it to one hour after start date
-                newDateEnd = new Date(startDate);
-                newDateEnd.setHours(startDate.getHours() + 1);
-                end.value = newDateEnd.toISOString().slice(0, 16);
-            } else {
-                // Adjust for timezone if necessary
-                if (newDateEnd.toTimeString().slice(9, 17) === "GMT+0100") {
-                    newDateEnd.setHours(newDateEnd.getHours() + 1);
-                } else {
-                    newDateEnd.setHours(newDateEnd.getHours() + 2);
-                }
-                end.value = newDateEnd.toISOString().slice(0, 16);
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            const radios = document.querySelectorAll("input[name='is_Fix']");
-            const fixBlock = document.getElementById("is_fix");
-            const notFixBlock = document.getElementById("is_not_fix");
-
-            function toggleBlocks() {
-                const checked = document.querySelector("input[name='is_Fix']:checked");
-                if (!checked) {
-                    fixBlock.style.display = "none";
-                    notFixBlock.style.display = "none";
-                    return;
-                }
-
-                if (checked.value === "1") { // Fixes
-                    fixBlock.style.display = "block";
-                    notFixBlock.style.display = "none";
-                } else { // Prévisionnelles
-                    fixBlock.style.display = "none";
-                    notFixBlock.style.display = "block";
-                }
-            }
-
-            // écoute sur les radios
-            radios.forEach(radio => {
-                radio.addEventListener("change", toggleBlocks);
-            });
-
-            // appel initial au chargement (pour garder l’état si old('is_Fix'))
-            toggleBlocks();
+    <script type="module">
+        import {
+            initEventForm
+        } from '/js/form.js';
+        initEventForm({
+            defaultStart: null,
+            defaultEnd: null
         });
     </script>
 </x-app-layout>
