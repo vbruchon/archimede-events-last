@@ -15,7 +15,6 @@ class DateConversionService
         $newDate = Carbon::parse($date);
         $now = Carbon::now();
         $diffInDays = $now->diffInDays($newDate, false);
-        $diffInHumans = $now->diffForHumans($newDate);
 
         if ($diffInDays > 365) {
             $diffInYears = floor($diffInDays / 365);
@@ -26,13 +25,20 @@ class DateConversionService
         } elseif ($diffInDays > 0) {
             $phrase = 'Dans ' . $diffInDays . ' jour(s)';
         } elseif ($diffInDays === 0) {
-            $phrase = 'Demain';
+            $phrase = 'Aujourd\'hui';
+        } elseif ($diffInDays < -365) {
+            $diffInYears = floor(abs($diffInDays) / 365);
+            $phrase = 'Il y a ' . $diffInYears . ' an(s)';
+        } elseif ($diffInDays < -30) {
+            $diffInMonths = floor(abs($diffInDays) / 30);
+            $phrase = 'Il y a ' . $diffInMonths . ' mois';
         } else {
-            $phrase = $diffInHumans;
+            $phrase = 'Il y a ' . abs($diffInDays) . ' jour(s)';
         }
 
         return $phrase;
     }
+
 
     public function convertDateToDays($date)
     {
