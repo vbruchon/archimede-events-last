@@ -3,57 +3,72 @@ document.addEventListener("DOMContentLoaded", function () {
     const filterDropdown = document.getElementById("filterDropdown");
     const resetBtn = document.getElementById("resetBtn");
     const main = document.querySelector("main");
-    let backdiv;
+    let backdiv = null;
 
-    // Toggle dropdown
-    filterButton.addEventListener("click", function (e) {
-        filterDropdown.classList.toggle("hidden");
-        filterButton.classList.toggle("border");
-        filterButton.classList.toggle("border-custom-light-purple");
+    const openDropdown = () => {
+        filterDropdown.classList.remove("hidden");
+        filterButton.classList.add("border", "border-custom-light-purple");
+        createBackDiv();
+    };
 
-        if (!filterDropdown.classList.contains("hidden")) {
+    const closeDropdown = () => {
+        filterDropdown.classList.add("hidden");
+        filterButton.classList.remove("border", "border-custom-light-purple");
+        removeBackDiv();
+    };
+
+    const createBackDiv = () => {
+        if (!backdiv) {
             backdiv = document.createElement("div");
             backdiv.id = "back-div";
             backdiv.style =
-                "position: fixed;  width: 100%; height: 100%; top: 0%; background-color: var(--color-custom-blue); opacity: 90%;";
-            main.appendChild(backdiv); // <- ici
-        } else if (backdiv) {
+                "position: fixed; width: 100%; height: 100%; top: 0; background-color: var(--color-custom-blue); opacity: 0.9;";
+            main.appendChild(backdiv);
+
+            backdiv.addEventListener("click", closeDropdown);
+        }
+    };
+
+    const removeBackDiv = () => {
+        if (backdiv) {
             backdiv.remove();
+            backdiv = null;
+        }
+    };
+
+    const resetForm = () => {
+        const form = document.getElementById("filterbar");
+        form.reset();
+
+        form.querySelectorAll("select").forEach(
+            (select) => (select.selectedIndex = 0)
+        );
+
+        form.querySelectorAll("input[type=checkbox]").forEach(
+            (checkbox) => (checkbox.checked = false)
+        );
+
+        closeDropdown();
+
+        window.location.href = "/dashboard/events";
+    };
+
+    filterButton.addEventListener("click", () => {
+        if (filterDropdown.classList.contains("hidden")) {
+            openDropdown();
+        } else {
+            closeDropdown();
         }
     });
 
-    // Click outside closes dropdown
-    document.addEventListener("click", function (e) {
+    resetBtn.addEventListener("click", resetForm);
+
+    document.addEventListener("click", (e) => {
         if (
             !filterDropdown.contains(e.target) &&
             !filterButton.contains(e.target)
         ) {
-            filterDropdown.classList.add("hidden");
-            filterButton.classList.remove(
-                "border",
-                "border-custom-light-purple"
-            );
-            if (backdiv) backdiv.remove();
+            closeDropdown();
         }
-    });
-    backdiv.addEventListener("click", () => {
-        filterDropdown.classList.add("hidden");
-        filterButton.classList.remove("border", "border-custom-light-purple");
-        backdiv.remove();
-    });
-
-    // Reset form
-    resetBtn.addEventListener("click", function () {
-        const form = document.getElementById("filterbar");
-        form.reset();
-    });
-
-    // Auto-submit on select change
-    const form = document.getElementById("filterbar");
-    const formElements = form.querySelectorAll("select, input[type=date]");
-    formElements.forEach((el) => {
-        el.addEventListener("change", function () {
-            form.submit();
-        });
     });
 });

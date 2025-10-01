@@ -138,7 +138,6 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        // Récupérer les IDs des tags sélectionnés depuis la requête
         $tagIds = $request->input('tags');
 
         $validated = $this->validateEvent($request);
@@ -150,7 +149,6 @@ class EventController extends Controller
 
         $event->save();
 
-        // Associer les tags à l'événement créé
         $event->tags()->attach($tagIds);
 
         return redirect()->route('userEvent.all')->with('success', 'L\'événement a bien été créé');
@@ -259,7 +257,7 @@ class EventController extends Controller
                 'selectedStructure' => $selectedStructure,
                 'selectedParticipant' => $selectedParticipant,
                 'selectedAccessType' => $selectedAccessType,
-                'checkedTags' => $checkedTags, // Ajoutez cette ligne
+                'checkedTags' => $checkedTags,
                 'selectedDateStart' => $selectedDateStart,
                 'selectedDateEnd' => $selectedDateEnd,
 
@@ -282,7 +280,6 @@ class EventController extends Controller
 
             $svgIcons = $svg->createSvgArray();
 
-            // Sinon, retourne la vue partielle des événements filtrés
             return view('event.list', [
                 'events' => $events,
                 'dateStartToString' => $dateStartToString,
@@ -296,7 +293,7 @@ class EventController extends Controller
                 'selectedStructure' => $selectedStructure,
                 'selectedParticipant' => $selectedParticipant,
                 'selectedAccessType' => $selectedAccessType,
-                'checkedTags' => $checkedTags, // Ajoutez cette ligne
+                'checkedTags' => $checkedTags,
                 'selectedDateStart' => $selectedDateStart,
                 'selectedDateEnd' => $selectedDateEnd,
                 'svg' => $svgIcons
@@ -308,65 +305,59 @@ class EventController extends Controller
     {
         $query = Event::query();
 
-        $query->where(function ($query) use ($request) {
-            if ($request->filled('structure')) {
-                $structureName = $request->input('structure');
-                $query->whereHas('structure', function ($query) use ($structureName) {
-                    $query->where('name', $structureName);
-                });
-            }
+        if ($request->filled('structure')) {
+            $structureName = $request->input('structure');
+            $query->whereHas('structure', fn($q) => $q->where('name', $structureName));
+        }
 
-            if ($request->filled('participants')) {
-                $numberName = $request->input('participants');
-                $query->whereHas('number_of_participants', function ($query) use ($numberName) {
-                    $query->where('name', $numberName);
-                });
-            }
+        if ($request->filled('participants')) {
+            $numberName = $request->input('participants');
+            $query->whereHas('number_of_participants', fn($q) => $q->where('name', $numberName));
+        }
 
-            if ($request->filled('accessType')) {
-                $accessTypeName = $request->input('accessType');
-                $query->whereHas('accessType', function ($query) use ($accessTypeName) {
-                    $query->where('name', $accessTypeName);
-                });
-            }
-            if ($request->filled('tags')) {
-                $tags = $request->input('tags');
-                $query->whereHas('tags', function ($query) use ($tags) {
-                    $query->whereIn('id', $tags);
-                });
-            }
-        });
+        if ($request->filled('accessType')) {
+            $accessTypeName = $request->input('accessType');
+            $query->whereHas('accessType', fn($q) => $q->where('name', $accessTypeName));
+        }
 
+        if ($request->filled('tags')) {
+            $tags = $request->input('tags');
+            $query->whereHas('tags', fn($q) => $q->whereIn('id', $tags));
+        }
 
-        if ($request->filled('date_start') && !$request->filled('date_end')) {
-            $dateStartLabel = $request->input('date_start');
-            $dateStart = Carbon::createFromFormat('d-m-Y H:i', $dateStartLabel)->startOfDay();
-            $query->whereDate('date_start', $dateStart->format('Y-m-d'));
-        } elseif ($request->filled('date_end') && !$request->filled('date_start')) {
-            $dateEndLabel = $request->input('date_end');
-            $dateEnd = Carbon::createFromFormat('d-m-Y H:i', $dateEndLabel)->endOfDay();
-            $query->whereDate('date_end', $dateEnd->format('Y-m-d'));
-        } elseif ($request->filled('date_start') && $request->filled('date_end')) {
-            $dateStartLabel = $request->input('date_start');
-            $dateEndLabel = $request->input('date_end');
-            $dateStart = Carbon::createFromFormat('d-m-Y H:i', $dateStartLabel)->startOfDay();
-            $dateEnd = Carbon::createFromFormat('d-m-Y H:i', $dateEndLabel)->endOfDay();
-            $query->whereBetween('date_start', [$dateStart->format('Y-m-d H:i:s'), $dateEnd->format('Y-m-d H:i:s')])
-                ->orWhereBetween('date_end', [$dateStart->format('Y-m-d H:i:s'), $dateEnd->format('Y-m-d H:i:s')]);
+        $dateStart = $request->input('date_start');
+        $dateEnd = $request->input('date_end');
+
+        if ($dateStart || $dateEnd) {
+            $query->where(function ($q) use ($dateStart, $dateEnd) {
+                if ($dateStart) {
+                    $start = Carbon::createFromFormat('Y-m-d', $dateStart)->startOfDay();
+                }
+                if ($dateEnd) {
+                    $end = Carbon::createFromFormat('Y-m-d', $dateEnd)->endOfDay();
+                }
+
+                if ($dateStart && !$dateEnd) {
+                    $q->whereDate('date_start', $start->format('Y-m-d'));
+                } elseif (!$dateStart && $dateEnd) {
+                    $q->whereDate('date_end', $end->format('Y-m-d'));
+                } elseif ($dateStart && $dateEnd) {
+                    $q->whereBetween('date_start', [$start, $end])
+                        ->orWhereBetween('date_end', [$start, $end]);
+                }
+            });
         }
 
         return $query;
     }
 
+
     public function export(EventExportFileService $exportFileService)
     {
-        // Récupérez les données de vos événements depuis votre modèle Event
         $events = Event::all();
 
-        // Utilisez le service pour exporter les événements
         $icsData = $exportFileService->exportToICS($events);
 
-        // Faites quelque chose avec les données ICS, par exemple : télécharger le fichier
         return response($icsData)
             ->header('Content-Type', 'text/calendar')
             ->header('Content-Disposition', 'attachment; filename="events.ics"');
